@@ -30,7 +30,7 @@ all: $(NAME)
 
 $(NAME):
 	gcc -Wall -Wextra -Werror -c $(SRC) -I$(INC)
-	ar rc $(NAME) ft_*.o
+	ar rc $(NAME) $(OBJ)
 	ranlib $(NAME)
 
 clean:
