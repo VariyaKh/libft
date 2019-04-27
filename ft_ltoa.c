@@ -1,28 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_itoa.c                                          :+:      :+:    :+:   */
+/*   ft_ltoa.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: variya <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/27 19:19:20 by drdraugr          #+#    #+#             */
-/*   Updated: 2019/04/26 15:47:31 by variya           ###   ########.fr       */
+/*   Updated: 2019/04/26 21:28:29 by variya           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include <stdlib.h>
 
-static int      g_int_min;
+static long long g_long_min;
 
-static int		nbrlen(int n)
+static int		nbrlen(long long n)
 {
 	int	len;
 
 	len = 0;
-	g_int_min = -2147483648;
-	if (n == g_int_min)
-		return (11);
+	g_long_min = -9223372036854775807 - 1;
+	if (n == g_long_min)
+		return (20);
 	if (n < 0)
 	{
 		len++;
@@ -38,7 +38,7 @@ static int		nbrlen(int n)
 	return (len);
 }
 
-static int		check_min_neg(int *n, unsigned int *sign)
+static int		check_min_neg(long long *n, unsigned int *sign)
 {
 	unsigned int	flag;
 
@@ -46,7 +46,7 @@ static int		check_min_neg(int *n, unsigned int *sign)
 	if (*n < 0)
 	{
 		*sign = 1;
-		if (*n == g_int_min)
+		if (*n == g_long_min)
 		{
 			*n = *n / 10;
 			flag = 1;
@@ -56,10 +56,10 @@ static int		check_min_neg(int *n, unsigned int *sign)
 	return (flag);
 }
 
-char			*ft_itoa(int n)
+char			*ft_ltoa(long long n)
 {
-	char		*str;
-	int		len;
+	char			*str;
+	int			    len;
 	unsigned int	sign;
 
 	len = nbrlen(n);
@@ -68,15 +68,14 @@ char			*ft_itoa(int n)
 		return (str);
 	sign = 0;
 	if (check_min_neg(&n, &sign))
-		*(str + --len) = g_int_min / 10;
+		*(str + --len) = '8';
 	while (len)
 	{
-		if (len == 1 && sign)
-			*str = '-';
-		else
-			*(str + len - 1) = (char)('0' + n % 10);
+		*(str + len - 1) = (char)('0' + n % 10);
 		n = n / 10;
 		len--;
 	}
+	if (sign)
+		*str = '-';
 	return (str);
 }

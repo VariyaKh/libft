@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_itoa.c                                          :+:      :+:    :+:   */
+/*   ft_itoa_base.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: variya <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/27 19:19:20 by drdraugr          #+#    #+#             */
-/*   Updated: 2019/04/26 15:47:31 by variya           ###   ########.fr       */
+/*   Updated: 2019/04/27 15:56:07 by variya           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 static int      g_int_min;
 
-static int		nbrlen(int n)
+static int		nbrlen(int n, short base)
 {
 	int	len;
 
@@ -30,7 +30,7 @@ static int		nbrlen(int n)
 	}
 	while (1)
 	{
-		n = n / 10;
+		n = n / base;
 		len++;
 		if (n == 0)
 			break ;
@@ -56,27 +56,31 @@ static int		check_min_neg(int *n, unsigned int *sign)
 	return (flag);
 }
 
-char			*ft_itoa(int n)
+char			*ft_itoa_base(int n, short base)
 {
-	char		*str;
-	int		len;
+	char			*str;
+	unsigned int    d;
+	int			    len;
 	unsigned int	sign;
 
-	len = nbrlen(n);
+	len = nbrlen(n, base);
 	str = ft_strnew(len);
 	if (!str)
 		return (str);
 	sign = 0;
 	if (check_min_neg(&n, &sign))
-		*(str + --len) = g_int_min / 10;
+		*(str + --len) = '8';
 	while (len)
 	{
-		if (len == 1 && sign)
-			*str = '-';
+		d = n % base;
+		if (d >= 10)
+			*(str + len - 1) = (char)('A' + d % 10);
 		else
-			*(str + len - 1) = (char)('0' + n % 10);
-		n = n / 10;
+			*(str + len - 1) = (char)('0' + d);
+		n = n / base;
 		len--;
 	}
+	if (sign)
+		*str = '-';
 	return (str);
 }
